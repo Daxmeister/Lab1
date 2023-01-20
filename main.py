@@ -24,19 +24,28 @@ class Dictionary_of_categories():
             self.dictionary[i] = 0
 
     #def append_to_dict(self, number):'''
-
+'''def vector_generator():
+    np.random.seed(10**7)
+    mu = 0
+    sigma = (50*11/12)**(0.5)/10
+    return mu + sigma * np.random.randn(1000)'''
 
 def create_vector_w_all_results():
     y = []
-    for i in range(1_000):
+    for i in range(1_000_0):
         y.append(a_round_of_gameplay())
     return y
 
-def present_distribution_from_vector(vector):
+def present_distribution_from_vector_old(vector):
     unique_elements, counts_elements = np.unique(vector, return_counts=True)
     plt.stem(unique_elements, counts_elements)
     plt.show()
 
+def present_distribution_from_vector(vector):
+    #unique_elements, counts_elements = np.unique(vector, return_counts=True)
+    number_of_bins = 50
+    n, bins, patches = plt.hist(vector,number_of_bins, density=1)
+    plt.show()
 
 #present_distribution_from_vector(create_vector_w_all_results())
 
@@ -57,12 +66,17 @@ def present_distribution_from_vector(vector):
 from scipy.stats import norm
 #import statistics
 
-# Plot between -10 and 10 with .001 steps.
-x_axis = np.arange(-250, 250, 10)
+def present_distribution_from_vector_with_normaldistribution_curve(vector):
+    mean = 0
+    sd = (50 * 11 / 12) ** (1 / 2) * 10
+    x = mean + sd * np.random.rand(1000)
 
-# Calculating mean and standard deviation
-mean = 0
-sd = (50*11/12)**(1/2)*10
+    number_of_bins = 50
+    n, bins, patches = plt.hist(vector, number_of_bins, density=1)
+    y = (1 / np.sqrt(2 * np.pi) * sd ) * np.exp(-0.5 * (1 / sd * (bins - mean))**2)
 
-plt.plot(x_axis, norm.pdf(x_axis, mean, sd))
-plt.show()
+    plt.plot(bins, y, '--')
+
+    plt.show()
+
+present_distribution_from_vector_with_normaldistribution_curve(create_vector_w_all_results())
