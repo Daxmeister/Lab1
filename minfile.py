@@ -121,6 +121,7 @@ likelihood_summariser(n, bins)
 #####################################################################################################################
 # 1.5 New game
 #####################################################################################################################
+
 # I make the assumption that I can calculate without generating 1000000 cases.
 # The chances of success are 1/2 * 3/6 * 4/52 = 1/52
 # We can formulate the banks winnings as Y = n - X*b
@@ -129,9 +130,57 @@ likelihood_summariser(n, bins)
 # than 0.
 # E(Y) = E(n - X*b) = n - b* E(X) = n - b*n/52 = n * (1-b/52)
 # We can plot the expected winnings per player (must be multiplied by n for absolute numbers).
-# This number needs to be greater than 0 in order to expect profits from our gambling den. One sees that b>52
+# This number needs to be greater than 0 in order to expect profits from our gambling den. One sees that b<52
 
 prize_money = np.arange(0, 200)
-income = 1 - prize_money/52
+expected_income_per_customer = 1 - prize_money/52
+plt.plot(prize_money, expected_income_per_customer)
+plt.plot(52, 0, marker='o')
+plt.show()
 
-fig
+#####################################################################################################################
+# 1.6 New game
+#####################################################################################################################
+
+def play_game():
+    for i in range(10): # We repeat the game for every player
+        y = []
+        current_state = 0
+        for i in range(1000):   # Each player plays 1000 times
+            if random.randrange(0, 52) == 11:   # The chances of success are 1/52
+                current_state = current_state - 50  # If they win, the bank looses 51-1=50
+            else:
+                current_state += 1  # Else the bank wins 1
+            y.append(current_state) # We append the current bank_status to follow the status
+        plt.plot(y)
+    plt.show()
+play_game()
+
+#####################################################################################################################
+# 1.7 Question
+#####################################################################################################################
+# Different in different runs, but we made money from 8 people in the first run
+
+#####################################################################################################################
+# 1.8 Tweeeet
+#####################################################################################################################
+def one_coin():
+    for i in range(10):
+        if random.randrange(0, 2) == 1:
+            return 0
+    return 1
+
+def playing_cointoss():
+    result_vector = []
+    for i in range(10000):
+        number_of_perfect_coins = 0
+        for i in range(0, 1024):    # This is 1024 people flipping 10 coins each. Appends 1 if at least one person succeeded, else 0
+            number_of_perfect_coins += one_coin()
+        if number_of_perfect_coins > 0:
+            result_vector.append(1)
+        else:
+            result_vector.append(0)
+    print(np.mean(np.array(result_vector))) # The mean will be the average amount of wins
+
+playing_cointoss()
+
