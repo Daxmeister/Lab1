@@ -25,12 +25,23 @@ def vector_creator():
         y.append(a_round_of_gameplay())
     return y
 
+# Alternative method for generating the game_samples that is more efficient
+def alt_vector_creator():
+    # We create a 1_000_000 random vectors with the amount of times that a person would win out of 600
+    vector = np.random.binomial(600, 1/12, 1_000_000)
+    vector = vector * 10 # We then multiply the amount of times won by the winning to get the total winnings
+    vector = vector - 500 # We then subtract the fixed cost, 100 starting money and 600 spent on playing
+    return vector
+
+
+
 # Create a histogram of the WINNINGS (but actually of the density distribution of the different winnings)
-vector = vector_creator()
+#vector = vector_creator()
+vector = alt_vector_creator()
 number_of_bins = 50
 n, bins, patches = plt.hist(vector, number_of_bins, density=1)
 plt.show()
-
+exit()
 #####################################################################################################################
 # 1.2 Plot a Gaussian distribution curve over the graph
 #####################################################################################################################
