@@ -3,30 +3,8 @@ import random
 import numpy as np
 import matplotlib.pyplot as plt
 
-# Create a function for the game
-def game_play():
-    '''Returns win or loss of the gamer'''
-    winning = -1
-    if random.randrange(0, 12) == 11:
-        winning += 10
-    return winning
-
-# Playing the game 600 times
-def a_round_of_gameplay():
-    netto_money = 100
-    for i in range (600):
-        netto_money += game_play()
-    return netto_money
-
-# Create a vector that contains the values of playing the game 1_000_000 times
-def vector_creator():
-    y = []
-    for i in range(1_000_0):
-        y.append(a_round_of_gameplay())
-    return y
-
 # Alternative method for generating the game_samples that is more efficient
-def alt_vector_creator():
+def vector_creator():
     # We create a 1_000_000 random vectors with the amount of times that a person would win out of 600
     vector = np.random.binomial(600, 1/12, 1_000_000)
     vector = vector * 10 # We then multiply the amount of times won by the winning to get the total winnings
@@ -36,12 +14,11 @@ def alt_vector_creator():
 
 
 # Create a histogram of the WINNINGS (but actually of the density distribution of the different winnings)
-#vector = vector_creator()
-vector = alt_vector_creator()
-number_of_bins = 50
+
+vector = vector_creator()
+number_of_bins = 65
 n, bins, patches = plt.hist(vector, number_of_bins, density=1)
 plt.show()
-exit()
 #####################################################################################################################
 # 1.2 Plot a Gaussian distribution curve over the graph
 #####################################################################################################################
@@ -51,13 +28,12 @@ exit()
 mean = np.mean(vector)
 # Should be around 0
 sd = (np.var(vector))**(0.5)
-# Should be around 10*(50*11/12)^(1/2)
-
+# Should be around 10*(50*11/12)^(1/2) =
 # We then plot the curve
 
 x = mean + sd * np.random.rand(1000)
 
-number_of_bins = 50 # How large our "steps" are for our plot
+number_of_bins = 65 # How large our "steps" are for our plot
 n, bins, patches = plt.hist(vector, number_of_bins, density=1)
 y = 1 / (np.sqrt(2 * np.pi) * sd) * np.exp(-0.5 * ((bins - mean) / sd) ** 2)
 
@@ -70,7 +46,7 @@ plt.show()
 #####################################################################################################################
 
 # The gaussian distribution fits the distribution very well.
-# To explain why both why it is centered around 0 and why the distribution fits the gaussian distribution (Bell curve)
+# To explain both why it is centered around 0 and why the distribution fits the gaussian distribution (Bell curve)
 # so well we should look att the mathematics.
 
 # We have a binomialy distributed value which determines whether or not we win 10 kr.
@@ -86,7 +62,7 @@ plt.show()
 # Which is why the curve fits the distribution.
 
 #####################################################################################################################
-# 1.4 The likelyhood of earning more than 100 kr
+# 1.4 The likelihood of earning more than 100 kr
 #####################################################################################################################
 
 # For an accurate computation we want to sum all "stacks" starting with 101 and divide that by all possible outcomes.
@@ -129,6 +105,7 @@ def likelihood_summariser(n, bin):
 
 likelihood_summariser(n, bins)
 
+
 #####################################################################################################################
 # 1.5 New game
 #####################################################################################################################
@@ -148,6 +125,7 @@ expected_income_per_customer = 1 - prize_money/52
 plt.plot(prize_money, expected_income_per_customer)
 plt.plot(52, 0, marker='o')
 plt.show()
+
 
 #####################################################################################################################
 # 1.6 New game
